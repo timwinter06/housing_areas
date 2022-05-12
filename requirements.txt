@@ -4,4 +4,6 @@ sklearn
 seaborn
 matplotlib
 scipy
-openpxyl
+fastapi==0.73.0
+uvicorn[standart]==0.17.0.post1
+openpxyl==3.0.9
