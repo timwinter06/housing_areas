@@ -128,22 +128,29 @@ def main(args):
     r2 = r2_score(y_test, y_pred)
     metrics = {'rmse': rmse, 'r2': r2}
 
-    # Save model
+    # Save results to 'results' dir
     results_path = 'results'
     with open(os.path.join(results_path, args.model_version), 'wb') as files:
         pickle.dump(model, files)
-    # Save encoder
     with open(os.path.join(results_path, f"{args.model_version}_{area_feature}_encoder"), 'wb') \
             as files:
         pickle.dump(ohc, files)
-    # Save metrics
     with open(os.path.join(results_path, f'{args.model_version}_metrics'), 'w') as fp:
         json.dump(metrics, fp)
+
+    # If this is the model to deploy, save it to the api dir
+    if args.deploy:
+        with open(os.path.join('api', 'app', 'model'), 'wb') as files:
+            pickle.dump(model, files)
+        with open(os.path.join('api', 'app', 'encoder'), 'wb') \
+                as files:
+            pickle.dump(ohc, files)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_version", type=str, required=True)
     parser.add_argument("--test_ratio", type=float, required=True)
+    parser.add_argument("--deploy", type=bool, required=True)
     args = parser.parse_args()
     main(args)

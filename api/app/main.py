@@ -7,11 +7,11 @@ from pydantic import BaseModel
 
 
 # Load model
-with open(os.path.join('..', 'results', 'test_model'), 'rb') as file:
+with open(os.path.join('../model'), 'rb') as file:
     model = pickle.load(file)
 
 # Load encoder
-with open(os.path.join('..', 'results', 'test_model_area_code_encoder'), 'rb') as file:
+with open(os.path.join('../encoder'), 'rb') as file:
     ohc = pickle.load(file)
 
 
@@ -45,7 +45,11 @@ def encode_area(ohc, df):
 
 
 def get_predictions(input_data: HouseAreaFeatures):
-    """
+    """ Serves predictions for price of WOZ in certain area.
+    Args:
+        input_data (HouseAreaFeatures): input features
+    Returns:
+        dictionary with predicted woz-value.
     """
     input_dict = {
         'single': input_data.single,
