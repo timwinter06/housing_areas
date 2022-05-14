@@ -17,6 +17,7 @@ with open(os.path.join('encoder'), 'rb') as file:
 
 # Define object we classify
 class HouseAreaFeatures(BaseModel):
+    """ Defines input types for API post request."""
     single: float
     married_no_kids: float
     not_marred_no_kids: float

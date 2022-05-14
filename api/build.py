@@ -6,7 +6,7 @@ import subprocess
 import argparse
 
 PROJECT_DICT = {
-    'sbx': 'df-dds-ml-dev-e015',
+    'sbx': 'housing-sbx',
     'dev': 'housing-dev',
     'acc': 'housing-acc',
     'prd': 'housing-prd'
@@ -51,12 +51,11 @@ if __name__ == "__main__":
     args = parser.parse_args()
     env = args.env
     project_id = PROJECT_DICT[env]
-    api_name = "housing-area-predictor"
+    API_NAME = "housing-area-predictor"
 
-    print(f"Building {api_name} to {env}")
+    print(f"Building {API_NAME} to {env}")
     print("Configuring gcloud")
     _ = run_command(f"gcloud config set project {project_id}")
     print("Starting build_and_deploy script")
-    cmd = f"""sh build_and_deploy.sh --project {project_id} --name {api_name} --env {env}"""
+    cmd = f"""sh build_and_deploy.sh --project {project_id} --name {API_NAME} --env {env}"""
     _ = run_command(cmd)
-
