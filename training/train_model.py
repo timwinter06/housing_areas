@@ -122,11 +122,13 @@ def main(args):
 
     # Make prediction
     y_pred = model.predict(x_test)
+    y_train_pred = model.predict(x_train)
 
     # Compute metrics
     rmse = mean_squared_error(y_test, y_pred) ** 0.5
-    r2 = r2_score(y_test, y_pred)
-    metrics = {'rmse': rmse, 'r2': r2}
+    r2_train = r2_score(y_train, y_train_pred)
+    r2_test = r2_score(y_test, y_pred)
+    metrics = {'rmse': rmse, 'r2_train': r2_train, 'r2_test': r2_test}
 
     # Save results to 'results' dir
     results_path = 'results'
