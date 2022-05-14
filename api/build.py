@@ -16,11 +16,8 @@ PROJECT_DICT = {
 def run_command(command, return_output=False):
     """Prints output of subprocess command in real-time.
     Args:
-        command (TYPE): Description
+        command: command to run in prompt
         return_output (bool): Return output of command as an array or not.
-
-    Returns:
-        TYPE: Description
     """
     process = subprocess.Popen(
         command, stdout=subprocess.PIPE, shell=True)
@@ -47,12 +44,10 @@ if __name__ == "__main__":
                         help='Choose environment',
                         choices=['sbx', 'dev', 'acc', 'prd'],
                         required=True)
-    parser.add_argument('--grant_access', action='store_true')
     args = parser.parse_args()
     env = args.env
     project_id = PROJECT_DICT[env]
     API_NAME = "housing-area-predictor"
-
     print(f"Building {API_NAME} to {env}")
     print("Configuring gcloud")
     _ = run_command(f"gcloud config set project {project_id}")
