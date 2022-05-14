@@ -6,6 +6,7 @@ import subprocess
 import argparse
 
 PROJECT_DICT = {
+    'sbx': 'df-dds-ml-dev-e015',
     'dev': 'housing-dev',
     'acc': 'housing-acc',
     'prd': 'housing-prd'
@@ -44,7 +45,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--env',
                         help='Choose environment',
-                        choices=['dev', 'acc', 'prd'],
+                        choices=['sbx', 'dev', 'acc', 'prd'],
                         required=True)
     parser.add_argument('--grant_access', action='store_true')
     args = parser.parse_args()

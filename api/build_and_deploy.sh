@@ -14,7 +14,8 @@ esac; shift; done
 [ -n "${env-}" ] || (echo "Missing required argument '--env'" && exit 1)
 
 echo "Building the docker image..."
-gcloud builds submit ./app -t eu.gcr.io/${project}/${name} --project ${project}
+gcloud builds submit ../api -t eu.gcr.io/${project}/${name} --project ${project}
 
 echo "Deploying the image to Cloud Run..."
-gcloud run deploy ${name} --image eu.gcr.io/${project}/${name}
+gcloud run deploy ${name} --image eu.gcr.io/${project}/${name} --region europe-west1
+
