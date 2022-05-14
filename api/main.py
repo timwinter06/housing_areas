@@ -7,11 +7,11 @@ from pydantic import BaseModel
 
 
 # Load model
-with open(os.path.join('../model'), 'rb') as file:
+with open(os.path.join('model'), 'rb') as file:
     model = pickle.load(file)
 
 # Load encoder
-with open(os.path.join('../encoder'), 'rb') as file:
+with open(os.path.join('encoder'), 'rb') as file:
     ohc = pickle.load(file)
 
 
