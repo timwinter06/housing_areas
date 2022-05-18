@@ -66,7 +66,7 @@ def get_predictions(input_data: HouseAreaFeatures):
     df_input = pd.DataFrame(input_dict, index=[0])
     df_input = encode_area(ohc, df_input)
     pred = model.predict(df_input)[0]
-    pred_dict = {'predicted woz price': round(pred)}
+    pred_dict = {'predicted woz price': round(pred,2)}
     return pred_dict
 
 
