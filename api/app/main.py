@@ -14,6 +14,10 @@ with open(os.path.join('model'), 'rb') as file:
 with open(os.path.join('encoder'), 'rb') as file:
     ohc = pickle.load(file)
 
+# Load scaler
+with open(os.path.join('scaler'), 'rb') as file:
+    scaler = pickle.load(file)
+
 
 # Define object we classify
 class HouseAreaFeatures(BaseModel):
@@ -25,7 +29,6 @@ class HouseAreaFeatures(BaseModel):
     not_married_w_kids: float
     single_parent: float
     other: float
-    total: float
     area_code: str
 
 
@@ -60,10 +63,13 @@ def get_predictions(input_data: HouseAreaFeatures):
         'not married, with kids': input_data.not_married_w_kids,
         'single parent': input_data.single_parent,
         'other': input_data.other,
-        'total': input_data.total,
         'area_code': input_data.area_code
     }
+    input_dict['total'] = sum([int(i) for i in list(input_dict.values()) if type(i) == int or
+                               type(i) == float])
     df_input = pd.DataFrame(input_dict, index=[0])
+    numeric_columns = df_input.columns[df_input.dtypes != object]
+    df_input[numeric_columns] = scaler.transform(df_input[numeric_columns])
     df_input = encode_area(ohc, df_input)
     pred = model.predict(df_input)[0]
     pred_dict = {'predicted woz price': round(pred,2)}

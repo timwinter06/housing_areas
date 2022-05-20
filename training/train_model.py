@@ -11,7 +11,8 @@ import pickle
 import numpy as np
 import pandas as pd
 from sklearn import linear_model
-from sklearn.preprocessing import OneHotEncoder
+from sklearn.linear_model import Lasso
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 
@@ -111,13 +112,20 @@ def main(args):
                                                         test_size=args.test_ratio,
                                                         random_state=123)
 
+    # Scale data
+    numeric_columns = x_train.columns[x_train.dtypes != object]
+    scaler = StandardScaler()
+    x_train[numeric_columns] = scaler.fit_transform(x_train[numeric_columns])
+    x_test[numeric_columns] = scaler.transform(x_test[numeric_columns])
+
     # Encode categorical 
     ohc = OneHotEncoder(handle_unknown='ignore')
     x_train, ohc = encode_data(x_train, area_feature, True, ohc)
     x_test, _ = encode_data(x_test, area_feature, False, ohc)
 
     # Fit model
-    model = linear_model.LinearRegression()
+    # model = linear_model.LinearRegression()
+    model = Lasso(alpha=100)
     model.fit(x_train, y_train)
 
     # Make prediction
@@ -137,6 +145,8 @@ def main(args):
     with open(os.path.join(results_path, f"{args.model_version}_{area_feature}_encoder"), 'wb') \
             as files:
         pickle.dump(ohc, files)
+    with open(os.path.join(results_path, f'{args.model_version}_scaler'), 'wb') as fp:
+        pickle.dump(scaler, fp)
     with open(os.path.join(results_path, f'{args.model_version}_metrics'), 'w') as fp:
         json.dump(metrics, fp)
 
@@ -147,6 +157,9 @@ def main(args):
         with open(os.path.join('api', 'app', 'encoder'), 'wb') \
                 as files:
             pickle.dump(ohc, files)
+        with open(os.path.join('api', 'app', 'scaler'), 'wb') \
+                as files:
+            pickle.dump(scaler, files)
 
 
 if __name__ == "__main__":
