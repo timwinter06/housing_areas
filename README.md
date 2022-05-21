@@ -40,6 +40,25 @@ To package the api into a docker container, the directory contains a Dockerfile 
 The api directory also contains a build.py script which can be run to easily build and push the docker image to GCP,
 and deploy the API to a Cloud Run instance. Take note that the correct/ relevant GCP project is defined in the ``build.py`` script.
 
+## Cloud Deployment 
+
+### Cloud Run & Cloud Compute
+As already mentioned in above, it would make most sense to deploy the API to GCP Cloud Run. 
+This a serverless platform where you can deploy a containerized application. The main advantage of
+Cloud Run being serverless is that you do not have to deal with any of the infrastructure, and
+you only pay for when the API is used ( Cloud Run scales to zero). 
+
+For the training of the model we have multiple options. As the data will be updated daily, the most
+simple way would be to schedule a Cloud Compute instance to retrain the model daily. The trained 
+model can then be saved to GCS, where the API instance on Cloud Run can read in the model. More info
+on scheduling Cloud Compute: https://cloud.google.com/scheduler/docs/start-and-stop-compute-engine-instances-on-a-schedule
+
+### Vertex AI
+Alternatively, the training of the model and API to serve the model can all be done in Vertex AI.
+Using vertex-AI-pipelines you can build a training pipeline that can be scheduled to run daily (with
+e.g. Cloud Composer). The trained model can then be directly deployed to an endpoint. The upside of
+Vertex AI is that everything can be done neatly in one place and that it is more managed. The downside
+is that is more costly as you will pay for the whole time that a model is deployed. 
 
 ## Quick set up guide
 
