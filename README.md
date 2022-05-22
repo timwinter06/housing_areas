@@ -58,7 +58,7 @@ Alternatively, the training of the model and API to serve the model can all be d
 Using vertex-AI-pipelines you can build a training pipeline that can be scheduled to run daily (with
 e.g. Cloud Composer). The trained model can then be directly deployed to an endpoint. The upside of
 Vertex AI is that everything can be done neatly in one place and that it is more managed. The downside
-is that is more costly as you will pay for the whole time that a model is deployed. 
+is that it is more costly as you will pay for the whole time that a model is deployed. 
 
 ## Quick set up guide
 
