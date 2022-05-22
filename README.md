@@ -16,20 +16,22 @@ a trained (LASSO) regression model & some metrics being saved to the results & a
 The api directory contains the necessary files to deploy an API to serve the trained model either
 locally in a docker container, or deploy it to Cloud Run on GCP. 
 
-More detail on the contents of the directories is provided below. At the end of this file is 
+More detail on the contents of the directories is provided below. At the end of this file are some notes
+on how to deploy this to a cloud environment ( GCP) as well as
 a quick setup guide to deploy the model in a docker container. 
 
 ## eda
 This notebook should be run cell for cell. The plots generated together with the comments will
-explore the data and experiment with features & models. 
+explore the data and experiment with features & models. In the notebook it is explained why 
+the specific features and model in the train.py script were chosen. 
 
 ## training
 The train_model.py script can be run from the root directory like so:
 
 `` python training/train_model.py --model_version test_model --test_ratio 0.2 --deploy True``
 
-If the `deploy` parameter is set to true, the model and encoder will be saved in the api/app directory.
-The model, encoder, and metrics will also be saved to the results directory.
+If the `deploy` parameter is set to true, the model, encoder, and scaler will be saved in the api/app directory.
+The model, encoder, scaler, and metrics will also be saved to the results directory.
 
 ## api
 The api directory contains an app directory which has all the core logic to serve the trained model.
@@ -38,20 +40,20 @@ This directory also contains some basic tests which can be run by running `pytes
 To package the api into a docker container, the directory contains a Dockerfile and a docker-compose.yml file which can be run.
 
 The api directory also contains a build.py script which can be run to easily build and push the docker image to GCP,
-and deploy the API to a Cloud Run instance. Take note that the correct/ relevant GCP project is defined in the ``build.py`` script.
+and deploy the API to a Cloud Run instance. Take note that the correct/ relevant GCP project needs to be defined in the ``build.py`` script.
 
 ## Cloud Deployment 
 
 ### Cloud Run & Cloud Compute
-As already mentioned in above, it would make most sense to deploy the API to GCP Cloud Run. 
+As already mentioned above, it would make most sense to deploy the API to GCP Cloud Run. 
 This a serverless platform where you can deploy a containerized application. The main advantage of
 Cloud Run being serverless is that you do not have to deal with any of the infrastructure, and
 you only pay for when the API is used ( Cloud Run scales to zero). 
 
 For the training of the model we have multiple options. As the data will be updated daily, the most
 simple way would be to schedule a Cloud Compute instance to retrain the model daily. The trained 
-model can then be saved to GCS, where the API instance on Cloud Run can read in the model. More info
-on scheduling Cloud Compute: https://cloud.google.com/scheduler/docs/start-and-stop-compute-engine-instances-on-a-schedule
+model can then be saved to GCS, where the API instance on Cloud Run can read in the model. To save on costs, the
+Cloud Compute instance should be started and stopped when needed. More info on scheduling Cloud Compute: https://cloud.google.com/scheduler/docs/start-and-stop-compute-engine-instances-on-a-schedule
 
 ### Vertex AI
 Alternatively, the training of the model and API to serve the model can all be done in Vertex AI.
